@@ -65,6 +65,11 @@ public:
 		if (GetMouse(olc::Mouse::LEFT).bPressed)
 		{
 			// Get mouse position as it was at the start of the frame update and move the rectangle there
+			olc::vi2d mouse = GetMousePos();
+			double x = worldOffset.x + mouse.x * worldScale;
+			double y = worldOffset.y - mouse.y * worldScale;
+
+			worldOffset = { x,y };
 		}
 
 		// Poll mouse wheel
