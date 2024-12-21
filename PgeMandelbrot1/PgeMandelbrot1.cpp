@@ -31,14 +31,10 @@ public:
 
 		if (GetKey(olc::Key::R).bPressed)
 		{
-			// Reset Screen to World transformation
+			// Reset Screen-to-World transformation
 			worldOffset = { 0,0 };
 			worldScale = 4.0 / std::max(ScreenWidth(), ScreenHeight());
 			maxCount = 1024;
-		}
-		else if(GetKey(olc::Key::N).bPressed)
-		{
-			// Give the rectangle a new colour
 		}
 
 		// Move zoom rectangle
@@ -108,13 +104,13 @@ public:
 			for (int y = 0; y < ScreenHeight(); y++)
 			{
 				int count = MandelbrotCount(wX, wY);
-				// std::cout << count << " ";
 				olc::Pixel currPix(count % 255, count % 255, count % 255);
 				if (count >= maxCount)
 					currPix = olc::BLACK;
 				else
 				{
 					float angle = 2 * pi * count / maxCount;
+					// Palette based on @Eriksonn's calculation, see my post and OneLoneCoder Discord channel
 					currPix = olc::PixelF(0.5f * sin(angle) + 0.5f, 0.5f * sin(angle + 2*pithird) + 0.5f, 0.5f * sin(angle + 4 * pithird) + 0.5f);
 				}
 
@@ -165,7 +161,7 @@ int main()
 	PgeMandelbrot1 demo;
 
 	std::cout << "Copyright 2018 - 2024 OneLoneCoder.com" << std::endl;
-	std::cout << "Copyright 2024 - Frank " << std::endl;
+	std::cout << "Copyright 2024 - Frank B. Jakobsen" << std::endl;
 	if (demo.Construct(640, 480, 1, 1, false, false, false, false))
 		demo.Start();
 
