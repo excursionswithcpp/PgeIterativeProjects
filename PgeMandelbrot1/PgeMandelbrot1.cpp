@@ -13,9 +13,15 @@ public:
 	bool OnUserCreate() override
 	{
 		// Called once at the start, so create things here
-		worldOffset = { 0,0 };
+		// Setup mapping between pixels to complex number space
+		// Make room for the 2 x 2 area
 		worldScale = 4.0 / std::max(ScreenWidth(), ScreenHeight());
-		maxCount = 1024;
+		// Make sure (0.0 , 0.0 ) is in the middle of the screen
+		worldOffset = {
+			-worldScale * ScreenWidth() / 2,
+			worldScale * ScreenHeight() / 2
+		};
+		maxCount = 256;
 		return true;
 	}
 
@@ -32,9 +38,14 @@ public:
 		if (GetKey(olc::Key::R).bPressed)
 		{
 			// Reset Screen-to-World transformation
-			worldOffset = { 0,0 };
+			// Make room for the 2 x 2 area
 			worldScale = 4.0 / std::max(ScreenWidth(), ScreenHeight());
-			maxCount = 1024;
+			// Make sure (0.0 , 0.0 ) is in the middle of the screen
+			worldOffset = {
+				-worldScale * ScreenWidth() / 2,
+				worldScale * ScreenHeight() / 2
+			};
+			maxCount = 256;
 		}
 
 		// Move zoom rectangle
@@ -97,13 +108,14 @@ public:
 		double xStep = (worldBottomRight.x - worldTopLeft.x) / ScreenWidth();
 		double yStep = (worldBottomRight.y - worldTopLeft.y) / ScreenHeight();
 
-		double wX = worldTopLeft.x;
-		for (int x = pixelTopLeft.x; x < pixelBottomRight.x; x++)
+		// Calculate and draw line by line
+		double worldY = worldTopLeft.y;
+		for (int y = pixelTopLeft.y; y < pixelBottomRight.y; y++)
 		{
-			double wY = worldTopLeft.y;
-			for (int y = 0; y < ScreenHeight(); y++)
+			double worldX = worldTopLeft.x;
+			for (int x = 0; x < ScreenWidth(); x++)
 			{
-				int count = MandelbrotCount(wX, wY);
+				int count = MandelbrotCount(worldX, worldY);
 				olc::Pixel currPix(count % 255, count % 255, count % 255);
 				if (count >= maxCount)
 					currPix = olc::BLACK;
@@ -115,9 +127,9 @@ public:
 				}
 
 				Draw(x, y, currPix);
-				wY += yStep;
+				worldX += xStep;
 			}
-			wX += xStep;
+			worldY += yStep;
 		}
 
 		return true;
@@ -162,7 +174,7 @@ int main()
 
 	std::cout << "Copyright 2018 - 2024 OneLoneCoder.com" << std::endl;
 	std::cout << "Copyright 2024 - Frank B. Jakobsen" << std::endl;
-	if (demo.Construct(640, 480, 1, 1, false, false, false, false))
+	if (demo.Construct(640, 480, 2, 2, false, false, false, false))
 		demo.Start();
 
 	return 0;
