@@ -7,12 +7,18 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PgeMandelbrot1", "PgeMandel
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		clang Release|x64 = clang Release|x64
+		clang Release|x86 = clang Release|x86
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A3309EF8-C0D4-43FB-AD89-FBF9F7A53E5F}.clang Release|x64.ActiveCfg = clang Release|x64
+		{A3309EF8-C0D4-43FB-AD89-FBF9F7A53E5F}.clang Release|x64.Build.0 = clang Release|x64
+		{A3309EF8-C0D4-43FB-AD89-FBF9F7A53E5F}.clang Release|x86.ActiveCfg = clang Release|Win32
+		{A3309EF8-C0D4-43FB-AD89-FBF9F7A53E5F}.clang Release|x86.Build.0 = clang Release|Win32
 		{A3309EF8-C0D4-43FB-AD89-FBF9F7A53E5F}.Debug|x64.ActiveCfg = Debug|x64
 		{A3309EF8-C0D4-43FB-AD89-FBF9F7A53E5F}.Debug|x64.Build.0 = Debug|x64
 		{A3309EF8-C0D4-43FB-AD89-FBF9F7A53E5F}.Debug|x86.ActiveCfg = Debug|Win32

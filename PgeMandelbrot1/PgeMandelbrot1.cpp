@@ -1,3 +1,21 @@
+/*
+This code is:
+
+Copyright 2018 - 2024 OneLoneCoder.com
+Copyright 2024 - 2025 Frank B. Jakobsen
+Color palette courtesy of @Eriksonn
+
+It is released under a fairly free usage license, the OLC 3, which is fully described at the end of this code file
+
+The application is using the Pixel Game Engine - PGE - created by One Lone Coder
+aka javidx9, and David Barr in his job life.
+
+Links and references at the bottom in the license section.
+
+Have fun! That's the main purpose for my activities on Excursions With C++ as well.
+
+*/
+
 #define OLC_PGE_APPLICATION
 #include "olcPixelGameEngine.h"
 
@@ -71,7 +89,7 @@ public:
 		// Can also be checked for being held or released
 		if (GetMouse(olc::Mouse::LEFT).bPressed)
 		{
-			// Get mouse position as it was at the start of the frame update and move the rectangle there
+			// Get mouse position and move the rectangle there
 			olc::vi2d mouse = GetMousePos();
 			double x = worldOffset.x + mouse.x * worldScale;
 			double y = worldOffset.y - mouse.y * worldScale;
@@ -174,8 +192,64 @@ int main()
 
 	std::cout << "Copyright 2018 - 2024 OneLoneCoder.com" << std::endl;
 	std::cout << "Copyright 2024 - Frank B. Jakobsen" << std::endl;
+	std::cout << "Color palette courtesy of @Eriksonn" << std::endl;
 	if (demo.Construct(640, 480, 2, 2, false, false, false, false))
 		demo.Start();
 
 	return 0;
 }
+
+/*
+* 
+License(OLC - 3)
+~~~~~~~~~~~~~~~
+
+Copyright 2018 - 2024 OneLoneCoder.com
+Copyright 2024 - 2025 Frank B. Jakobsen
+Color palette courtesy of @Eriksonn
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met :
+
+1. Redistributions or derivations of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+
+2. Redistributions or derivative works in binary form must reproduce the above
+copyright notice.This list of conditions and the following	disclaimer must be
+reproduced in the documentation and /or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its contributors may
+be used to endorse or promote products derived from this software without specific
+prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS	"AS IS" AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.IN NO EVENT
+SHALL THE COPYRIGHT	HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING, BUT NOT LIMITED
+TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGE.
+
+	Links for OneLoneCoder
+	~~~~~
+	YouTube:	https://www.youtube.com/javidx9
+	https://www.youtube.com/javidx9extra
+	Discord:	https://discord.gg/WhwHUMV
+	Twitter:	https://www.twitter.com/javidx9
+	Twitch:		https://www.twitch.tv/javidx9
+	GitHub:		https://www.github.com/onelonecoder
+	Homepage:	https://www.onelonecoder.com
+	Patreon:	https://www.patreon.com/javidx9
+	Community:  https://community.onelonecoder.com
+
+	Javidx9's YouTube video on MandelBrot: https://www.youtube.com/watch?v=PBvLs88hvJ8
+
+	Links for Frank B. Jakobsen
+	~~~~~
+	Excursions with C++ blog: https://excursionswithcpp.com/
+	Github repository for this code: https://github.com/excursionswithcpp/PgeIterativeProjects
+
+*/
