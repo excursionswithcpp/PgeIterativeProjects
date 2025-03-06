@@ -48,7 +48,9 @@ public:
 		// called once per frame
 		// Poll keyboard input, there are predefined consts for allmost all keys
 		// Can also be checked for being held or released
-		if (GetKey(olc::Key::Q).bPressed)
+		if (GetKey(olc::Key::Q).bPressed
+			||
+			GetKey(olc::Key::ESCAPE).bPressed)
 		{
 			return false; // Quit immediately
 		}
@@ -134,7 +136,7 @@ public:
 			for (int x = 0; x < ScreenWidth(); x++)
 			{
 				int count = MandelbrotCount(worldX, worldY);
-				olc::Pixel currPix(count % 255, count % 255, count % 255);
+				olc::Pixel currPix;
 				if (count >= maxCount)
 					currPix = olc::BLACK;
 				else
