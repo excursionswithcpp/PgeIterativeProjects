@@ -5,6 +5,8 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PgeMandelbrot1", "PgeMandelbrot1\PgeMandelbrot1.vcxproj", "{A3309EF8-C0D4-43FB-AD89-FBF9F7A53E5F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PgeMandelbrotParallel", "PgeMandelbrotParallel\PgeMandelbrotParallel.vcxproj", "{413A5437-820C-4ADC-B09B-D248543E0B14}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		clang Release|x64 = clang Release|x64
@@ -27,6 +29,18 @@ Global
 		{A3309EF8-C0D4-43FB-AD89-FBF9F7A53E5F}.Release|x64.Build.0 = Release|x64
 		{A3309EF8-C0D4-43FB-AD89-FBF9F7A53E5F}.Release|x86.ActiveCfg = Release|Win32
 		{A3309EF8-C0D4-43FB-AD89-FBF9F7A53E5F}.Release|x86.Build.0 = Release|Win32
+		{413A5437-820C-4ADC-B09B-D248543E0B14}.clang Release|x64.ActiveCfg = Release|x64
+		{413A5437-820C-4ADC-B09B-D248543E0B14}.clang Release|x64.Build.0 = Release|x64
+		{413A5437-820C-4ADC-B09B-D248543E0B14}.clang Release|x86.ActiveCfg = Release|Win32
+		{413A5437-820C-4ADC-B09B-D248543E0B14}.clang Release|x86.Build.0 = Release|Win32
+		{413A5437-820C-4ADC-B09B-D248543E0B14}.Debug|x64.ActiveCfg = Debug|x64
+		{413A5437-820C-4ADC-B09B-D248543E0B14}.Debug|x64.Build.0 = Debug|x64
+		{413A5437-820C-4ADC-B09B-D248543E0B14}.Debug|x86.ActiveCfg = Debug|Win32
+		{413A5437-820C-4ADC-B09B-D248543E0B14}.Debug|x86.Build.0 = Debug|Win32
+		{413A5437-820C-4ADC-B09B-D248543E0B14}.Release|x64.ActiveCfg = Release|x64
+		{413A5437-820C-4ADC-B09B-D248543E0B14}.Release|x64.Build.0 = Release|x64
+		{413A5437-820C-4ADC-B09B-D248543E0B14}.Release|x86.ActiveCfg = Release|Win32
+		{413A5437-820C-4ADC-B09B-D248543E0B14}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
