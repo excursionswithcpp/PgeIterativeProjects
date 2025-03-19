@@ -29,8 +29,8 @@ Global
 		{A3309EF8-C0D4-43FB-AD89-FBF9F7A53E5F}.Release|x64.Build.0 = Release|x64
 		{A3309EF8-C0D4-43FB-AD89-FBF9F7A53E5F}.Release|x86.ActiveCfg = Release|Win32
 		{A3309EF8-C0D4-43FB-AD89-FBF9F7A53E5F}.Release|x86.Build.0 = Release|Win32
-		{413A5437-820C-4ADC-B09B-D248543E0B14}.clang Release|x64.ActiveCfg = Release|x64
-		{413A5437-820C-4ADC-B09B-D248543E0B14}.clang Release|x64.Build.0 = Release|x64
+		{413A5437-820C-4ADC-B09B-D248543E0B14}.clang Release|x64.ActiveCfg = clang Release|x64
+		{413A5437-820C-4ADC-B09B-D248543E0B14}.clang Release|x64.Build.0 = clang Release|x64
 		{413A5437-820C-4ADC-B09B-D248543E0B14}.clang Release|x86.ActiveCfg = Release|Win32
 		{413A5437-820C-4ADC-B09B-D248543E0B14}.clang Release|x86.Build.0 = Release|Win32
 		{413A5437-820C-4ADC-B09B-D248543E0B14}.Debug|x64.ActiveCfg = Debug|x64

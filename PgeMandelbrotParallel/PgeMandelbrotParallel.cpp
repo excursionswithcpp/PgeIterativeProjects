@@ -82,7 +82,7 @@ private:
 		return count;
 	}
 
-	void SingleThreadDrawing()
+	void DrawSingleThread()
 	{
 		// Current area for calculation must be calculated
 		olc::vd2d worldTopLeft = tv.GetWorldOffset();
@@ -157,7 +157,15 @@ public:
 		// Clear, even if we redraw all pixels
 		Clear(olc::BLACK);
 
-		SingleThreadDrawing();
+		// START TIMING
+		auto tp1 = std::chrono::high_resolution_clock::now();
+
+		// Select the current draw function from the description table
+		(this->*DrawFunctions[nCurrentDrawFunctionIndex].pDrawFunction)();
+
+		// STOP TIMING
+		auto tp2 = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> elapsedTime = tp2 - tp1;
 
 		// Text output will be overlayed on the graphics
 		uint32_t textScale = 1;
@@ -165,8 +173,10 @@ public:
 		auto mousePos = GetMousePos();
 		auto worldMousePos = tv.ScreenToWorld(mousePos);
 		
-		DrawString(0, 0, 
+		DrawString(0, 0,
 			"Mouse x: " + std::to_string(worldMousePos.x) + ", y: " + std::to_string(worldMousePos.y), olc::WHITE, textScale);
+		DrawString(0, 1*lineDistance,
+			"Calculation and DrawTime: " + std::to_string(elapsedTime.count()), olc::WHITE, textScale);
 
 
 		return true;
@@ -176,7 +186,7 @@ public:
 
 std::vector<PgeMandelbrotParallel::DrawFunctionDescription> PgeMandelbrotParallel::DrawFunctions 
 {
-
+	{ olc::Key::K1, "1", "Single threaded drawing", &PgeMandelbrotParallel::DrawSingleThread},
 };
 
 int main()
