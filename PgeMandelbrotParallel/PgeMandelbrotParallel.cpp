@@ -263,6 +263,50 @@ private:
 	}
 #endif
 
+#if defined(__GNUG__)
+	void DrawTBBParallelFor()
+	{
+		// Current area for calculation must be calculated
+		olc::vd2d worldTopLeft = tv.GetWorldOffset();
+		olc::vd2d worldScale = tv.GetWorldScale();
+
+		double xStep = 1.0 / worldScale.x;
+		double yStep = 1.0 / worldScale.y;
+
+		// Calculate and draw line by line
+		// Using Microsoft concurrency library PPL parallel_for
+		// There are no dependencies between each y-iteration for the Mandelbrot set
+		// but ensure that no dependencies are created, e.g. reused variable
+
+		// Use the parallel_for algorithm with a request for parallel execution
+		// A runtime scheduler will try to use all the cores
+		tbb::parallel_for(0, ScreenHeight(),
+			[&](size_t y)
+			{
+				// This must have a separate copy for each possible thread
+				double worldY = worldTopLeft.y + y * yStep;
+				double worldX = worldTopLeft.x;
+				for (int x = 0; x < ScreenWidth(); x++)
+				{
+					int count = MandelbrotCount(worldX, worldY);
+					olc::Pixel currPix;
+					if (count >= maxCount)
+						currPix = olc::BLACK;
+					else
+					{
+						float angle = 2 * pi * count / maxCount;
+						// Palette based on @Eriksonn's calculation, see my post and OneLoneCoder Discord channel
+						currPix = olc::PixelF(0.5f * sin(angle) + 0.5f, 0.5f * sin(angle + 2 * pithird) + 0.5f, 0.5f * sin(angle + 4 * pithird) + 0.5f);
+					}
+
+					Draw(x, y, currPix);
+					worldX += xStep;
+				}
+				worldY += yStep;
+			}
+		);
+	}
+#endif
 
 public:
 	bool OnUserCreate() override
@@ -325,8 +369,6 @@ public:
 			}
 		}
 
-
-
 		// Clear, even if we redraw all pixels
 		Clear(olc::BLACK);
 
@@ -349,18 +391,32 @@ public:
 		int line = 0;
 
 		std::string compiler = "Unknown";
-
-
+#if defined(_MSC_VER)
+#if defined(__clang_version__)
+		compiler = "Visual Studio clang ("  __clang_version__ ")";
+#else
+		compiler = "MSVC";
+#endif
+#elif defined(__GNUG__)
+#if defined(__MINGW64__)
+		compiler = "MinGW64";
+#else
+		compiler = "g++";
+#endif
+#elif defined(__clang_version)
+		compiler = "clang ("  __clang_version__ ")";
+#endif
 
 		DrawString(0, line++ * lineDistance,
-			"Draw mode: " + std::to_string(nCurrentDrawFunctionIndex+1) + " " + DrawFunctions[nCurrentDrawFunctionIndex].description, olc::WHITE, textScale);
+			"Draw mode: " + DrawFunctions[nCurrentDrawFunctionIndex].commandKeyName + " " + DrawFunctions[nCurrentDrawFunctionIndex].description, olc::WHITE, textScale);
+		DrawString(0, line++ * lineDistance,
+			"Compiler: " + compiler, olc::WHITE, textScale);
 		DrawString(0, line++ * lineDistance,
 			"Mouse x: " + std::to_string(worldMousePos.x) + ", y: " + std::to_string(worldMousePos.y), olc::WHITE, textScale);
 		DrawString(0, line++ * lineDistance,
 			"Calculation and DrawTime: " + std::to_string(elapsedTime.count()), olc::WHITE, textScale);
 		DrawString(0, line++ * lineDistance,
 			"maxCount: " + std::to_string(maxCount), olc::WHITE, textScale);
-
 
 		return true;
 	}
@@ -374,6 +430,9 @@ std::vector<PgeMandelbrotParallel::DrawFunctionDescription> PgeMandelbrotParalle
 	{ olc::Key::K3, "3", "C++17 parallel for_each drawing", &PgeMandelbrotParallel::DrawCpp17ForEach},
 #if defined(_MSC_VER)
 	{ olc::Key::K4, "4", "Microsoft PPL parallel_for", &PgeMandelbrotParallel::DrawPPLParallelFor},
+#endif
+#if defined(__GNUG__)
+	{ olc::Key::K5, "5", "oneTBB parallel_for", &PgeMandelbrotParallel::DrawTBBParallelFor},
 #endif
 };
 
