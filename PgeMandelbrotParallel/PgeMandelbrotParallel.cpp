@@ -4,6 +4,18 @@
 #define OLC_PGEX_TRANSFORMEDVIEW
 #include "olcPGEX_TransformedView.h"
 
+#include <algorithm>
+#include <numeric>
+#include <execution>
+
+#if defined(_MSC_VER)
+#include <ppl.h>
+#endif
+
+#if defined(__GNUG__)
+#include "tbb/tbb.h"
+#endif
+
 class PgeMandelbrotParallel : public olc::PixelGameEngine
 {
 public:
@@ -88,8 +100,8 @@ private:
 		olc::vd2d worldTopLeft = tv.GetWorldOffset();
 		olc::vd2d worldScale = tv.GetWorldScale();
 
-		double xStep = 1.0/worldScale.x;
-		double yStep = 1.0/worldScale.y;
+		double xStep = 1.0 / worldScale.x;
+		double yStep = 1.0 / worldScale.y;
 
 		// Calculate and draw line by line
 		double worldY = worldTopLeft.y;
@@ -116,6 +128,140 @@ private:
 		}
 	}
 
+	void DrawOpenMP()
+	{
+		// Current area for calculation must be calculated
+		olc::vd2d worldTopLeft = tv.GetWorldOffset();
+		olc::vd2d worldScale = tv.GetWorldScale();
+
+		double xStep = 1.0 / worldScale.x;
+		double yStep = 1.0 / worldScale.y;
+
+		// Calculate and draw line by line
+		// Using OpenMP
+		// There are no dependencies between each y-iteration for the Mandelbrot set
+		// but ensure that no dependencies are created, e.g. reused variable
+		// schedule(dynamic) ensures this non-dependency is used, scheduling the lines as fast as possible
+		// nowait is probably unnecessary in this case
+#pragma omp parallel
+#pragma omp for schedule(dynamic, 1) nowait
+		for (int y = 0; y < ScreenHeight(); y++)
+		{
+			// This must have a separate copy for each possible thread
+			double worldY = worldTopLeft.y + y * yStep;
+			double worldX = worldTopLeft.x;
+			for (int x = 0; x < ScreenWidth(); x++)
+			{
+				int count = MandelbrotCount(worldX, worldY);
+				olc::Pixel currPix;
+				if (count >= maxCount)
+					currPix = olc::BLACK;
+				else
+				{
+					float angle = 2 * pi * count / maxCount;
+					// Palette based on @Eriksonn's calculation, see my post and OneLoneCoder Discord channel
+					currPix = olc::PixelF(0.5f * sin(angle) + 0.5f, 0.5f * sin(angle + 2 * pithird) + 0.5f, 0.5f * sin(angle + 4 * pithird) + 0.5f);
+				}
+
+				Draw(x, y, currPix);
+				worldX += xStep;
+			}
+			worldY += yStep;
+		}
+	}
+
+	void DrawCpp17ForEach()
+	{
+		// Current area for calculation must be calculated
+		olc::vd2d worldTopLeft = tv.GetWorldOffset();
+		olc::vd2d worldScale = tv.GetWorldScale();
+
+		double xStep = 1.0 / worldScale.x;
+		double yStep = 1.0 / worldScale.y;
+
+		// Calculate and draw line by line
+		// Using C++17 for_each algorithm with parallel execution
+		// There are no dependencies between each y-iteration for the Mandelbrot set
+		// but ensure that no dependencies are created, e.g. reused variable
+
+		// Create a vector of indices, this is how it is done in standard C++ pre C++20
+		// For C++20 and later, a iota view range may be possible (TBD)
+		std::vector<size_t> indices(ScreenHeight());
+		std::iota(indices.begin(), indices.end(), 0);
+
+		// Use the for_each algorithm with a request for parallel execution
+		// A runtime scheduler will try to use all the cores
+		std::for_each(std::execution::par, indices.begin(), indices.end(),
+			[&](size_t y)
+			{
+				// This must have a separate copy for each possible thread
+				double worldY = worldTopLeft.y + y * yStep;
+				double worldX = worldTopLeft.x;
+				for (int x = 0; x < ScreenWidth(); x++)
+				{
+					int count = MandelbrotCount(worldX, worldY);
+					olc::Pixel currPix;
+					if (count >= maxCount)
+						currPix = olc::BLACK;
+					else
+					{
+						float angle = 2 * pi * count / maxCount;
+						// Palette based on @Eriksonn's calculation, see my post and OneLoneCoder Discord channel
+						currPix = olc::PixelF(0.5f * sin(angle) + 0.5f, 0.5f * sin(angle + 2 * pithird) + 0.5f, 0.5f * sin(angle + 4 * pithird) + 0.5f);
+					}
+
+					Draw(x, y, currPix);
+					worldX += xStep;
+				}
+				worldY += yStep;
+			}
+		);
+	}
+
+#if defined(_MSC_VER)
+	void DrawPPLParallelFor()
+	{
+		// Current area for calculation must be calculated
+		olc::vd2d worldTopLeft = tv.GetWorldOffset();
+		olc::vd2d worldScale = tv.GetWorldScale();
+
+		double xStep = 1.0 / worldScale.x;
+		double yStep = 1.0 / worldScale.y;
+
+		// Calculate and draw line by line
+		// Using Microsoft concurrency library PPL parallel_for
+		// There are no dependencies between each y-iteration for the Mandelbrot set
+		// but ensure that no dependencies are created, e.g. reused variable
+
+		// Use the parallel_for algorithm with a request for parallel execution
+		// A runtime scheduler will try to use all the cores
+		concurrency::parallel_for(0, ScreenHeight(),
+			[&](size_t y)
+			{
+				// This must have a separate copy for each possible thread
+				double worldY = worldTopLeft.y + y * yStep;
+				double worldX = worldTopLeft.x;
+				for (int x = 0; x < ScreenWidth(); x++)
+				{
+					int count = MandelbrotCount(worldX, worldY);
+					olc::Pixel currPix;
+					if (count >= maxCount)
+						currPix = olc::BLACK;
+					else
+					{
+						float angle = 2 * pi * count / maxCount;
+						// Palette based on @Eriksonn's calculation, see my post and OneLoneCoder Discord channel
+						currPix = olc::PixelF(0.5f * sin(angle) + 0.5f, 0.5f * sin(angle + 2 * pithird) + 0.5f, 0.5f * sin(angle + 4 * pithird) + 0.5f);
+					}
+
+					Draw(x, y, currPix);
+					worldX += xStep;
+				}
+				worldY += yStep;
+			}
+		);
+	}
+#endif
 
 
 public:
@@ -154,6 +300,33 @@ public:
 			ResetView();
 		}
 
+		// Handle count
+		if (GetKey(olc::Key::UP).bPressed)
+		{
+			maxCount += 64;
+		}
+		else if (GetKey(olc::Key::DOWN).bPressed)
+		{
+			maxCount -= 64;
+			if (maxCount <= 0)
+				maxCount = 64;
+		}
+
+		// Determine overall algorithm
+		for (size_t i = 0; i < DrawFunctions.size(); i++)
+		{
+			if (GetKey(DrawFunctions[i].commandKey).bPressed)
+			{
+				if (nCurrentDrawFunctionIndex != i)
+				{
+					nCurrentDrawFunctionIndex = i;
+				}
+				break;
+			}
+		}
+
+
+
 		// Clear, even if we redraw all pixels
 		Clear(olc::BLACK);
 
@@ -173,10 +346,20 @@ public:
 		auto mousePos = GetMousePos();
 		auto worldMousePos = tv.ScreenToWorld(mousePos);
 		
-		DrawString(0, 0,
+		int line = 0;
+
+		std::string compiler = "Unknown";
+
+
+
+		DrawString(0, line++ * lineDistance,
+			"Draw mode: " + std::to_string(nCurrentDrawFunctionIndex+1) + " " + DrawFunctions[nCurrentDrawFunctionIndex].description, olc::WHITE, textScale);
+		DrawString(0, line++ * lineDistance,
 			"Mouse x: " + std::to_string(worldMousePos.x) + ", y: " + std::to_string(worldMousePos.y), olc::WHITE, textScale);
-		DrawString(0, 1*lineDistance,
+		DrawString(0, line++ * lineDistance,
 			"Calculation and DrawTime: " + std::to_string(elapsedTime.count()), olc::WHITE, textScale);
+		DrawString(0, line++ * lineDistance,
+			"maxCount: " + std::to_string(maxCount), olc::WHITE, textScale);
 
 
 		return true;
@@ -187,6 +370,11 @@ public:
 std::vector<PgeMandelbrotParallel::DrawFunctionDescription> PgeMandelbrotParallel::DrawFunctions 
 {
 	{ olc::Key::K1, "1", "Single threaded drawing", &PgeMandelbrotParallel::DrawSingleThread},
+	{ olc::Key::K2, "2", "OpenMP drawing", &PgeMandelbrotParallel::DrawOpenMP},
+	{ olc::Key::K3, "3", "C++17 parallel for_each drawing", &PgeMandelbrotParallel::DrawCpp17ForEach},
+#if defined(_MSC_VER)
+	{ olc::Key::K4, "4", "Microsoft PPL parallel_for", &PgeMandelbrotParallel::DrawPPLParallelFor},
+#endif
 };
 
 int main()
