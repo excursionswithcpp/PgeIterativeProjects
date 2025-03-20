@@ -403,7 +403,7 @@ public:
 #else
 		compiler = "g++";
 #endif
-#elif defined(__clang_version)
+#elif defined(__clang_version__)
 		compiler = "clang ("  __clang_version__ ")";
 #endif
 
