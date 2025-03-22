@@ -1,1 +1,1 @@
-g++  PgeMandelbrotParallel.cpp -lX11 -lGL -lpthread -lpng -lstdc++fs -std=c++17 -O3 -ltbb -o PgeMandelbrotParallel
+g++  PgeMandelbrotParallel.cpp -fopenmp -lX11 -lGL -lpthread -lpng -lstdc++fs -std=c++17 -O3 -ltbb -o PgeMandelbrotParallel
