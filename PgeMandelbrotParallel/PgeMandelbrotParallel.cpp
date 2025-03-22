@@ -400,6 +400,8 @@ public:
 #elif defined(__GNUG__)
 #if defined(__MINGW64__)
 		compiler = "MinGW64";
+#elif defined(__clang_version__)
+		compiler = "clang ("  __clang_version__ ")";
 #else
 		compiler = "g++";
 #endif
