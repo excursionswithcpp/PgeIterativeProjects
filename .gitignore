@@ -361,4 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
 /PgeMandelbrot1/PgeMandelbrot1.exe
+/PgeMandelbrot1/PgeMandelbrot1
+/PgeMandelbrot1/CLangPgeMandelbrot1
+/PgeMandelbrotParallel/CLangPgeMandelbrotParallel
+/PgeMandelbrotParallel/PgeMandelbrotParallel
