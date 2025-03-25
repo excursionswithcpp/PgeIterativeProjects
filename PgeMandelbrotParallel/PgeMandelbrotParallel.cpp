@@ -4,12 +4,19 @@
 #define OLC_PGEX_TRANSFORMEDVIEW
 #include "olcPGEX_TransformedView.h"
 
+#define USE_TBB_WITH_MSC 1
+
 #include <algorithm>
 #include <numeric>
 #include <execution>
 
 #if defined(_MSC_VER)
-#include <ppl.h>
+	#include <ppl.h>
+	#if defined(USE_TBB_WITH_MSC)
+		// Demands installation of OneTBB for Windows/MSVC
+		// Also works with clang in VS, but include and lib paths must be set
+		#include <tbb/tbb.h>
+	#endif
 #endif
 
 #if defined(__GNUG__)
@@ -263,7 +270,9 @@ private:
 	}
 #endif
 
-#if defined(__GNUG__)
+	// The following demands installation of OneTBB for Windows/MSVC to work with MSVC _MSC_VER
+
+#if defined(__GNUG__) || defined(USE_TBB_WITH_MSC)
 	void DrawTBBParallelFor()
 	{
 		// Current area for calculation must be calculated
@@ -430,11 +439,11 @@ std::vector<PgeMandelbrotParallel::DrawFunctionDescription> PgeMandelbrotParalle
 	{ olc::Key::K1, "1", "Single threaded drawing", &PgeMandelbrotParallel::DrawSingleThread},
 	{ olc::Key::K2, "2", "OpenMP drawing", &PgeMandelbrotParallel::DrawOpenMP},
 	{ olc::Key::K3, "3", "C++17 parallel for_each drawing", &PgeMandelbrotParallel::DrawCpp17ForEach},
-#if defined(_MSC_VER)
-	{ olc::Key::K4, "4", "Microsoft PPL parallel_for", &PgeMandelbrotParallel::DrawPPLParallelFor},
+#if defined(__GNUG__)  || defined(USE_TBB_WITH_MSC)
+	{ olc::Key::K4, "4", "oneTBB parallel_for", &PgeMandelbrotParallel::DrawTBBParallelFor},
 #endif
-#if defined(__GNUG__)
-	{ olc::Key::K5, "5", "oneTBB parallel_for", &PgeMandelbrotParallel::DrawTBBParallelFor},
+#if defined(_MSC_VER)
+	{ olc::Key::K5, "5", "Microsoft PPL parallel_for", &PgeMandelbrotParallel::DrawPPLParallelFor},
 #endif
 };
 
