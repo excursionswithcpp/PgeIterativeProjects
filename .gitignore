@@ -362,3 +362,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /PgeMandelbrot1/PgeMandelbrot1.exe
+
+# Clang configuration build files - Author specific
+[Cc]lang*/
