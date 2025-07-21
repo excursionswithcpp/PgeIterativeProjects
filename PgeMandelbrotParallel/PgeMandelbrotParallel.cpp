@@ -32,7 +32,8 @@ public:
 	}
 
 private:
-	// This extension will register itself to the current PGE object
+	// This extension will know the current PGE object
+	// through a public static variable in PGEX
 	olc::TransformedView tv;
 
 	void ResetView()
