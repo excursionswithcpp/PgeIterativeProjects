@@ -217,6 +217,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="clangBuild.sh" />
+    <None Include="linuxBuild.sh" />
     <None Include="minGWBuild.sh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

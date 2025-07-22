@@ -32,5 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="minGWBuild.sh" />
+    <None Include="clangBuild.sh" />
+    <None Include="linuxBuild.sh" />
   </ItemGroup>
 </Project>
