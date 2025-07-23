@@ -239,7 +239,7 @@ private:
 		// There are no dependencies between each y-iteration for the Mandelbrot set
 		// but ensure that no dependencies are created, e.g. reused variable
 
-		// Use the parallel_for algorithm with a request for parallel execution
+		// Use the parallel_for algorithm
 		// A runtime scheduler will try to use all the cores
 		concurrency::parallel_for(0, ScreenHeight(),
 			[&](size_t y)
@@ -285,7 +285,7 @@ private:
 		// There are no dependencies between each y-iteration for the Mandelbrot set
 		// but ensure that no dependencies are created, e.g. reused variable
 
-		// Use the parallel_for algorithm with a request for parallel execution
+		// Use the parallel_for algorithm
 		// A runtime scheduler will try to use all the cores
 		tbb::parallel_for(0, ScreenHeight(),
 			[&](size_t y)
