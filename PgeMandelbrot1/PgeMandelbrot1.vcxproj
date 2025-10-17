@@ -201,6 +201,11 @@
   <ItemGroup>
     <ClInclude Include="olcPixelGameEngine.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="clangBuild.sh" />
+    <None Include="linuxBuild.sh" />
+    <None Include="minGWBuild.sh" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

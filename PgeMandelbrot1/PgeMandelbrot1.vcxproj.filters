@@ -24,4 +24,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="clangBuild.sh" />
+    <None Include="linuxBuild.sh" />
+    <None Include="minGWBuild.sh" />
+  </ItemGroup>
 </Project>
