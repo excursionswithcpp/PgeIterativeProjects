@@ -28,7 +28,6 @@ Have fun! That's the main purpose for my activities on Excursions With C++ as we
 #define USE_TBB_WITH_MSC 1
 
 #include <algorithm>
-#include <numeric>
 #include <execution>
 
 #if defined(_MSC_VER)
