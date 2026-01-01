@@ -100,8 +100,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='clang Release|x64'">
-    <IncludePath>C:\Program Files (x86)\Intel\oneAPI\tbb\2022.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files (x86)\Intel\oneAPI\tbb\2022.0\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files (x86)\Intel\oneAPI\tbb\2022.3\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files (x86)\Intel\oneAPI\tbb\2022.3\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\Program Files %28x86%29\Intel\oneAPI\tbb\2022.3\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Intel\oneAPI\tbb\2022.3\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
