@@ -373,3 +373,4 @@ FodyWeavers.xsd
 /PgeMandelbrotParallel/CLangPgeMandelbrotParallel
 /PgeMandelbrotParallel/PgeMandelbrotParallel
 /PgeMandelbrotParallel/PgeMandelbrotParallel.exe
+*.o
